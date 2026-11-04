@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Technology: Read, Learn, Speak</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f6;--card:#fff;--ink:#14213d;--mute:#56647c;--line:#d3dde6;--acc:#2457f5;--acc-ink:#fff;--mark:#ffe27a;--ok:#1f8a5b;--okbg:#dff3e9;--bad:#c23b3b;--badbg:#f9e1e1;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a2b;--card:#182539;--ink:#e8eef8;--mute:#9db0cc;--line:#2c3c56;--acc:#6f95ff;--acc-ink:#0b1426;--mark:#7a6a1d;--ok:#5fd09c;--okbg:#17382c;--bad:#ff8c8c;--badbg:#3d2024}}
+:root[data-theme="dark"]{--bg:#101a2b;--card:#182539;--ink:#e8eef8;--mute:#9db0cc;--line:#2c3c56;--acc:#6f95ff;--acc-ink:#0b1426;--mark:#7a6a1d;--ok:#5fd09c;--okbg:#17382c;--bad:#ff8c8c;--badbg:#3d2024}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 Figtree,system-ui,sans-serif}
+main{max-width:700px;margin:0 auto;padding:20px 16px 60px}
+h1{font:600 clamp(28px,6vw,40px)/1.1 Literata,Georgia,serif;margin:8px 0 4px}
+.sub{color:var(--mute);margin:0 0 18px}
+nav{display:flex;gap:6px;overflow-x:auto;margin-bottom:16px}
+nav button{flex:1;min-width:96px;padding:10px 8px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:600 15px Figtree,sans-serif;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+button:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.read{font:400 19px/1.7 Literata,Georgia,serif;max-width:60ch}
+.read h2{font:600 24px/1.2 Literata,Georgia,serif;margin:0 0 12px}
+.w{background:linear-gradient(transparent 55%,var(--mark) 55%);border:0;color:inherit;font:inherit;padding:0;cursor:pointer}
+.w.seen{background:none;text-decoration:underline;text-decoration-color:var(--acc);text-underline-offset:4px}
+#def{position:sticky;bottom:12px;margin-top:16px;background:var(--ink);color:var(--bg);border-radius:12px;padding:14px 16px;font:400 16px/1.45 Figtree,sans-serif}
+#def b{font-size:18px}
+.hint{color:var(--mute);font-size:15px}
+.item{padding:12px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+select{font:inherit;padding:4px 6px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+select.ok{border-color:var(--ok);background:var(--okbg)}select.no{border-color:var(--bad);background:var(--badbg)}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:11px 18px;font:700 16px Figtree,sans-serif;cursor:pointer;margin-top:14px}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:11px 14px;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.no{border-color:var(--bad);background:var(--badbg)}
+.why{font-size:15px;color:var(--mute);margin:4px 0 0}
+.timer{font:600 56px/1 Literata,Georgia,serif;margin:10px 0}
+.prompt{font:600 22px/1.3 Literata,Georgia,serif;margin:8px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 15px Figtree,sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--ok);background:var(--okbg)}
+.score{font-weight:700;margin-top:12px}
+</style>
+</head>
+<body>
+<main>
+<h1>Are we addicted to our phones?</h1>
+<p class="sub">Upper-intermediate · Reading, vocabulary and speaking on technology</p>
+<nav role="tablist" id="tabs"></nav>
+
+<section id="p0">
+<div class="read" id="text"></div>
+<p class="hint">Tap a highlighted word to see what it means. Explored: <span id="cnt">0</span>/10</p>
+<div id="def" hidden></div>
+</section>
+
+<section id="p1" hidden>
+<p>Choose the best word for each gap.</p>
+<div id="gaps"></div>
+<button class="btn" id="chk">Check answers</button>
+<div class="score" id="gs"></div>
+</section>
+
+<section id="p2" hidden>
+<p>Answer the questions about the text.</p>
+<div id="qs"></div>
+<div class="score" id="qsc"></div>
+</section>
+
+<section id="p3" hidden>
+<p>Speak for one minute. Try to use as many target words as you can, and tick each one when you do.</p>
+<div class="prompt" id="pr"></div>
+<div class="timer" id="tm">1:00</div>
+<button class="btn" id="go">Start</button>
+<button class="btn alt" id="nx">New question</button>
+<div class="chips" id="chips"></div>
+<div class="score" id="used"></div>
+</section>
+</main>
+<script>
+var V=[
+["ubiquitous","seen everywhere","Smartphones are now so ubiquitous that it’s hard to find anyone without one."],
+["algorithm","a set of rules a computer follows to decide what to show you","The algorithm recommends videos based on what you watched yesterday."],
+["compulsively","in a way you can’t control","She checks her messages compulsively, even during meals."],
+["distraction","something that stops you from concentrating","A noisy phone is a major distraction when you’re trying to study."],
+["rely on","to depend on","Many small businesses rely on social media to find customers."],
+["wellbeing","your health and happiness","Getting enough sleep is essential for your physical and mental wellbeing."],
+["cut down on","to reduce the amount of something","I’m trying to cut down on coffee, so I only have one a day."],
+["disconnect","to stop being connected to the internet or a network","After a stressful week, he went camping to disconnect from the internet."],
+["outweigh","to be greater or more important than","For most people, the benefits outweigh the risks."],
+["boundaries","limits you set for what is acceptable","Parents should set clear boundaries about screen time."]];
+var TXT=["Twenty years ago, few people could have imagined how |0| smartphones would become. Today, most of us carry one everywhere, and many of us check it |2| — sometimes more than a hundred times a day.",
+"Part of the reason is design. Social media apps use an |1| to learn what keeps you watching, then serve you more of it. Every notification is a small invitation to leave whatever you were doing. The result is a constant stream of |3| that makes deep concentration harder than ever.",
+"Of course, technology has enormous benefits. We |4| our phones to navigate, to work, and to stay in touch with friends who live abroad. For many people, these advantages clearly |8| the downsides. The problem, researchers argue, is not the devices themselves but the way we use them.",
+"Some studies link heavy screen time to poorer sleep and lower |5|, especially among teenagers. That is why a growing number of people are trying to |6| their usage. Some switch off notifications; others leave their phone in another room at night. A few even take a weekend to fully |7|.",
+"Experts agree on one thing: you do not have to give up your phone. Instead, set clear |9| — and decide when technology serves you, rather than the other way round."];
+var $=function(i){return document.getElementById(i)};
+var seen={};
+$("text").innerHTML=TXT.map(function(p){return "<p>"+p.replace(/\|(\d)\|/g,function(m,i){return '<button class="w" data-i="'+i+'">'+V[i][0]+'</button>'})+"</p>"}).join("");
+$("text").addEventListener("click",function(e){var b=e.target.closest(".w");if(!b)return;var i=b.dataset.i;seen[i]=1;b.classList.add("seen");
+$("cnt").textContent=Object.keys(seen).length;var d=$("def");d.hidden=false;d.innerHTML="<b>"+V[i][0]+"</b> — "+V[i][1]+"<br><i>“"+V[i][2]+"”</i>"});
+var T=["Read","Words","Check","Speak"];
+T.forEach(function(t,i){var b=document.createElement("button");b.textContent=t;b.setAttribute("role","tab");b.setAttribute("aria-selected",i==0);b.onclick=function(){show(i)};$("tabs").appendChild(b)});
+function show(n){for(var i=0;i<4;i++){$("p"+i).hidden=i!=n;$("tabs").children[i].setAttribute("aria-selected",i==n)}window.scrollTo(0,0)}
+// gaps
+var G=[[0,"Smartphones are now so ___ that it’s hard to find anyone without one."],[1,"The ___ recommends videos based on what you watched yesterday."],[2,"She checks her messages ___, even during meals."],[3,"A noisy phone is a major ___ when you’re trying to study."],[4,"Many small businesses ___ social media to find customers."],[5,"Getting enough sleep is essential for your physical and mental ___."],[6,"I’m trying to ___ coffee, so I only have one a day."],[7,"After a stressful week, he went camping to ___ from the internet."],[8,"For most people, the benefits ___ the risks."],[9,"Parents should set clear ___ about screen time."]];
+var opts='<option value="">choose…</option>'+V.map(function(v,i){return '<option value="'+i+'">'+v[0]+'</option>'}).sort(function(){return .5-Math.random()}).join("");
+$("gaps").innerHTML=G.map(function(g,k){return '<div class="item">'+g[1].replace("___",'<select data-k="'+k+'" aria-label="Gap '+(k+1)+'">'+opts+'</select>')+'</div>'}).join("");
+$("chk").onclick=function(){var s=0;document.querySelectorAll("#gaps select").forEach(function(el){var ok=el.value==G[el.dataset.k][0];s+=ok;el.className=el.value===""?"":ok?"ok":"no"});
+$("gs").textContent="Score: "+s+"/10"+(s==10?" — excellent!":" — fix the red ones and check again.")};
+// quiz
+var Q=[["What makes social media hard to put down?",["Its algorithm learns what keeps you watching","It is free to download","Friends force you to use it"],0,"The text says apps use an algorithm to show you more of what keeps you watching."],
+["According to the researchers, what is the real problem?",["Smartphones are too expensive","The way people use their devices","Teenagers sleep too much"],1,"The problem is “not the devices themselves but the way we use them.”"],
+["Which way to reduce phone use is NOT mentioned?",["Switching off notifications","Leaving the phone in another room at night","Deleting all social media accounts","Taking a weekend to disconnect"],2,"Nobody in the text suggests deleting every account."],
+["What is the writer’s attitude to smartphones?",["Completely negative","Balanced: useful, but needing limits","Enthusiastic about screen time"],1,"The writer lists benefits and risks, then recommends boundaries."]];
+var qs=0,qd=0;
+$("qs").innerHTML=Q.map(function(q,k){return '<div class="item" data-k="'+k+'"><b>'+(k+1)+'. '+q[0]+'</b>'+q[1].map(function(o,j){return '<button class="opt" data-j="'+j+'">'+o+'</button>'}).join("")+'<p class="why" hidden>'+q[3]+'</p></div>'}).join("");
+$("qs").addEventListener("click",function(e){var b=e.target.closest(".opt");if(!b)return;var it=b.closest(".item");if(it.dataset.done)return;it.dataset.done=1;var q=Q[it.dataset.k],j=+b.dataset.j;
+it.querySelectorAll(".opt").forEach(function(o,x){if(x==q[2])o.classList.add("ok")});if(j==q[2])qs++;else b.classList.add("no");
+it.querySelector(".why").hidden=false;qd++;if(qd==Q.length)$("qsc").textContent="Score: "+qs+"/"+Q.length});
+// speaking
+var P=["Do you think people your age spend too much time on their phones? Why, or why not?","Describe an app or device you rely on every day and explain what life would be like without it.","Should schools ban phones in the classroom? Give reasons for your opinion.","Tell a story about a time technology caused you a problem or saved you."];
+var pi=0,tl=60,iv=null;
+$("pr").textContent=P[0];
+$("chips").innerHTML=V.map(function(v,i){return '<button class="chip" aria-pressed="false" data-i="'+i+'">'+v[0]+'</button>'}).join("");
+function cnt(){$("used").textContent="Target words used: "+document.querySelectorAll(".chip[aria-pressed=true]").length+"/10"}
+$("chips").addEventListener("click",function(e){var c=e.target.closest(".chip");if(!c)return;c.setAttribute("aria-pressed",c.getAttribute("aria-pressed")!="true");cnt()});
+function fmt(){$("tm").textContent=Math.floor(tl/60)+":"+("0"+tl%60).slice(-2)}
+$("go").onclick=function(){if(iv){clearInterval(iv);iv=null;$("go").textContent="Start";return}
+if(tl<=0)tl=60;$("go").textContent="Pause";iv=setInterval(function(){tl--;fmt();if(tl<=0){clearInterval(iv);iv=null;$("go").textContent="Start again";tl=0}},1000)};
+$("nx").onclick=function(){pi=(pi+1)%P.length;$("pr").textContent=P[pi];clearInterval(iv);iv=null;tl=60;fmt();$("go").textContent="Start";document.querySelectorAll(".chip").forEach(function(c){c.setAttribute("aria-pressed","false")});cnt()};
+cnt();
+</script>
+</body>
+</html>
